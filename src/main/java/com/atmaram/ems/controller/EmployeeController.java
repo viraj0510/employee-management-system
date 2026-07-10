@@ -60,4 +60,12 @@ public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 
     return ResponseEntity.noContent().build();
 }
+@GetMapping("/search")
+public ResponseEntity<List<EmployeeResponse>> searchEmployees(
+        @RequestParam String keyword) {
+
+    return ResponseEntity.ok(
+            employeeService.searchEmployees(keyword)
+    );
+}
 }

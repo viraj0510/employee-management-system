@@ -18,10 +18,13 @@ import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeServiceImpl implements EmployeeService {
 
+public class EmployeeServiceImpl implements EmployeeService {
+        
     private final EmployeeRepository employeeRepository;
 
+        
+    
     @Override
     public EmployeeResponse createEmployee(CreateEmployeeRequest request) {
 
@@ -139,4 +142,21 @@ public void deleteEmployee(Long id) {
 
     employeeRepository.delete(employee);
 }
+@Override
+public List<EmployeeResponse> searchEmployees(String keyword) {
+
+    return employeeRepository.searchEmployees(keyword)
+            .stream()
+            .map(employee -> EmployeeResponse.builder()
+                    .id(employee.getId())
+                    .employeeCode(employee.getEmployeeCode())
+                    .firstName(employee.getFirstName())
+                    .lastName(employee.getLastName())
+                    .email(employee.getEmail())
+                    .designation(employee.getDesignation())
+                    .status(employee.getStatus())
+                    .build())
+            .toList();
+}
+
 }

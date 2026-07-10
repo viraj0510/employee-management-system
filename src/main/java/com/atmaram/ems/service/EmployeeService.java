@@ -8,10 +8,10 @@ import java.util.List;
 public interface EmployeeService {
 
     EmployeeResponse createEmployee(CreateEmployeeRequest request);
-
+    
     Page<EmployeeResponse> getAllEmployees(int page, int size, String sortBy);
     EmployeeResponse getEmployeeById(Long id);
     EmployeeResponse updateEmployee(Long id, CreateEmployeeRequest request);
-
+    List<EmployeeResponse> searchEmployees(String keyword);
     void deleteEmployee(Long id);
 }
