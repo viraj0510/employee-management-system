@@ -36,4 +36,11 @@ public ResponseEntity<EmployeeResponse> getEmployeeById(
 
     return ResponseEntity.ok(employeeService.getEmployeeById(id));
 }
+@PutMapping("/{id}")
+public ResponseEntity<EmployeeResponse> updateEmployee(
+        @PathVariable Long id,
+        @Valid @RequestBody CreateEmployeeRequest request) {
+
+    return ResponseEntity.ok(employeeService.updateEmployee(id, request));
+}
 }

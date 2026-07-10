@@ -3,6 +3,8 @@ package com.atmaram.ems.service.impl;
 import com.atmaram.ems.dto.request.CreateEmployeeRequest;
 import com.atmaram.ems.dto.response.EmployeeResponse;
 import com.atmaram.ems.entity.Employee;
+import com.atmaram.ems.exception.DuplicateResourceException;
+import com.atmaram.ems.exception.ResourceNotFoundException;
 import com.atmaram.ems.repository.EmployeeRepository;
 import com.atmaram.ems.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +22,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeResponse createEmployee(CreateEmployeeRequest request) {
 
         if (employeeRepository.existsByEmployeeCode(request.getEmployeeCode())) {
-            throw new RuntimeException("Employee code already exists");
-        }
+    throw new DuplicateResourceException("Employee code already exists");
+}
 
         if (employeeRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Employee email already exists");
-        }
+    throw new DuplicateResourceException("Employee email already exists");
+}
 
         Employee employee = Employee.builder()
                 .employeeCode(request.getEmployeeCode())
@@ -75,7 +77,7 @@ public EmployeeResponse getEmployeeById(Long id) {
 
     Employee employee = employeeRepository.findById(id)
             .orElseThrow(() ->
-                    new RuntimeException("Employee not found"));
+        new ResourceNotFoundException("Employee not found"));
 
     return EmployeeResponse.builder()
             .id(employee.getId())
@@ -85,6 +87,37 @@ public EmployeeResponse getEmployeeById(Long id) {
             .email(employee.getEmail())
             .designation(employee.getDesignation())
             .status(employee.getStatus())
+            .build();
+}
+@Override
+public EmployeeResponse updateEmployee(Long id, CreateEmployeeRequest request) {
+
+    Employee employee = employeeRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Employee not found"));
+
+    employee.setEmployeeCode(request.getEmployeeCode());
+    employee.setFirstName(request.getFirstName());
+    employee.setLastName(request.getLastName());
+    employee.setEmail(request.getEmail());
+    employee.setPhone(request.getPhone());
+    employee.setGender(request.getGender());
+    employee.setDateOfBirth(request.getDateOfBirth());
+    employee.setJoiningDate(request.getJoiningDate());
+    employee.setDesignation(request.getDesignation());
+    employee.setSalary(request.getSalary());
+    employee.setStatus(request.getStatus());
+
+    Employee updatedEmployee = employeeRepository.save(employee);
+
+    return EmployeeResponse.builder()
+            .id(updatedEmployee.getId())
+            .employeeCode(updatedEmployee.getEmployeeCode())
+            .firstName(updatedEmployee.getFirstName())
+            .lastName(updatedEmployee.getLastName())
+            .email(updatedEmployee.getEmail())
+            .designation(updatedEmployee.getDesignation())
+            .status(updatedEmployee.getStatus())
             .build();
 }
 }
