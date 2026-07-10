@@ -31,6 +31,8 @@ protected void doFilterInternal(HttpServletRequest request,
 
     final String authHeader = request.getHeader("Authorization");
 
+System.out.println("Authorization Header: " + authHeader);
+
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
         filterChain.doFilter(request, response);
         return;
@@ -39,6 +41,8 @@ protected void doFilterInternal(HttpServletRequest request,
     String jwt = authHeader.substring(7);
 
     String username = jwtService.extractUsername(jwt);
+
+    System.out.println("JWT Username: " + username);
 
     if (username != null &&
             SecurityContextHolder.getContext().getAuthentication() == null) {
