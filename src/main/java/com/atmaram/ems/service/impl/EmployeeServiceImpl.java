@@ -70,4 +70,21 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .build())
             .collect(Collectors.toList());
 }
+@Override
+public EmployeeResponse getEmployeeById(Long id) {
+
+    Employee employee = employeeRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Employee not found"));
+
+    return EmployeeResponse.builder()
+            .id(employee.getId())
+            .employeeCode(employee.getEmployeeCode())
+            .firstName(employee.getFirstName())
+            .lastName(employee.getLastName())
+            .email(employee.getEmail())
+            .designation(employee.getDesignation())
+            .status(employee.getStatus())
+            .build();
+}
 }
