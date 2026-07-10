@@ -120,4 +120,13 @@ public EmployeeResponse updateEmployee(Long id, CreateEmployeeRequest request) {
             .status(updatedEmployee.getStatus())
             .build();
 }
+@Override
+public void deleteEmployee(Long id) {
+
+    Employee employee = employeeRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResourceNotFoundException("Employee not found"));
+
+    employeeRepository.delete(employee);
+}
 }
