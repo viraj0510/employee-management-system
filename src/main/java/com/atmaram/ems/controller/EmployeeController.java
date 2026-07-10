@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -26,10 +27,19 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
 
-    return ResponseEntity.ok(employeeService.getAllEmployees());
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "5") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy) {
+
+    return ResponseEntity.ok(
+            employeeService.getAllEmployees(page, size, sortBy)
+    );
 }
+
 @GetMapping("/{id}")
 public ResponseEntity<EmployeeResponse> getEmployeeById(
         @PathVariable Long id) {

@@ -11,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Service
 @RequiredArgsConstructor
@@ -57,10 +61,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponse> getAllEmployees() {
+public Page<EmployeeResponse> getAllEmployees(int page, int size, String sortBy) {
 
-    return employeeRepository.findAll()
-            .stream()
+    Pageable pageable = PageRequest.of(
+            page,
+            size,
+            Sort.by(sortBy).ascending()
+    );
+
+    return employeeRepository.findAll(pageable)
             .map(employee -> EmployeeResponse.builder()
                     .id(employee.getId())
                     .employeeCode(employee.getEmployeeCode())
@@ -69,9 +78,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .email(employee.getEmail())
                     .designation(employee.getDesignation())
                     .status(employee.getStatus())
-                    .build())
-            .collect(Collectors.toList());
+                    .build());
 }
+
+
 @Override
 public EmployeeResponse getEmployeeById(Long id) {
 
