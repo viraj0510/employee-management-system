@@ -42,6 +42,9 @@ public class Employee {
     @Column(name = "joining_date")
     private LocalDate joiningDate;
 
+    @Column(nullable = false)
+    private String department;
+
     private String designation;
 
     private BigDecimal salary;

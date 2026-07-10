@@ -20,4 +20,6 @@ public class EmployeeResponse {
     private String designation;
 
     private String status;
+
+    private String department;
 }

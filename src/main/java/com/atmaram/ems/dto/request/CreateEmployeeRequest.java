@@ -36,4 +36,6 @@ public class CreateEmployeeRequest {
     private BigDecimal salary;
 
     private String status;
+
+    private String department;
 }

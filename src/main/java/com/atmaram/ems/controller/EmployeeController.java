@@ -27,7 +27,7 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping
-public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
 
         @RequestParam(defaultValue = "0") int page,
 
@@ -46,6 +46,7 @@ public ResponseEntity<EmployeeResponse> getEmployeeById(
 
     return ResponseEntity.ok(employeeService.getEmployeeById(id));
 }
+
 @PutMapping("/{id}")
 public ResponseEntity<EmployeeResponse> updateEmployee(
         @PathVariable Long id,
@@ -53,6 +54,7 @@ public ResponseEntity<EmployeeResponse> updateEmployee(
 
     return ResponseEntity.ok(employeeService.updateEmployee(id, request));
 }
+
 @DeleteMapping("/{id}")
 public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 
@@ -60,12 +62,41 @@ public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 
     return ResponseEntity.noContent().build();
 }
+
+
 @GetMapping("/search")
-public ResponseEntity<List<EmployeeResponse>> searchEmployees(
-        @RequestParam String keyword) {
+public ResponseEntity<Page<EmployeeResponse>> searchEmployees(
+
+        @RequestParam(required = false) String firstName,
+
+        @RequestParam(required = false) String lastName,
+
+        @RequestParam(required = false) String department,
+
+        @RequestParam(required = false) String designation,
+
+        @RequestParam(required = false) String status,
+
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "10") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy) {
 
     return ResponseEntity.ok(
-            employeeService.searchEmployees(keyword)
+            employeeService.searchEmployees(
+                    firstName,
+                    lastName,
+                    department,
+                    designation,
+                    status,
+                    page,
+                    size,
+                    sortBy
+            )
     );
 }
+
+
+
 }
