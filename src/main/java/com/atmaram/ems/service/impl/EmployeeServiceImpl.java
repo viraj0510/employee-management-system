@@ -7,6 +7,8 @@ import com.atmaram.ems.repository.EmployeeRepository;
 import com.atmaram.ems.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,4 +53,21 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .status(savedEmployee.getStatus())
                 .build();
     }
+
+    @Override
+    public List<EmployeeResponse> getAllEmployees() {
+
+    return employeeRepository.findAll()
+            .stream()
+            .map(employee -> EmployeeResponse.builder()
+                    .id(employee.getId())
+                    .employeeCode(employee.getEmployeeCode())
+                    .firstName(employee.getFirstName())
+                    .lastName(employee.getLastName())
+                    .email(employee.getEmail())
+                    .designation(employee.getDesignation())
+                    .status(employee.getStatus())
+                    .build())
+            .collect(Collectors.toList());
+}
 }
